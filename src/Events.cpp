@@ -55,10 +55,9 @@ namespace Event
 			return EventResult::kContinue;
 		}
 
-		auto UI = RE::UI::GetSingleton();
-		auto intfcStr = RE::InterfaceStrings::GetSingleton();
+		const auto UI = RE::UI::GetSingleton();
 
-		if (!UI || !intfcStr || UI->IsMenuOpen(intfcStr->console)) {
+		if (!UI || UI->IsMenuOpen(RE::Console::MENU_NAME)) {
 			return EventResult::kContinue;
 		}
 

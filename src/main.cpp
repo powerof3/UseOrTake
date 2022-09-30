@@ -5,14 +5,10 @@ void MessageHandler(SKSE::MessagingInterface::Message* a_message)
 {
 	switch (a_message->type) {
 	case SKSE::MessagingInterface::kPostLoad:
-		{
-			Hooks::Install();
-		}
+		Hooks::Install();
 		break;
 	case SKSE::MessagingInterface::kDataLoaded:
-		{
-			Event::Manager::Register();
-		}
+		Event::Manager::Register();
 		break;
 	default:
 		break;
@@ -23,7 +19,7 @@ void MessageHandler(SKSE::MessagingInterface::Message* a_message)
 extern "C" DLLEXPORT constinit auto SKSEPlugin_Version = []() {
 	SKSE::PluginVersionData v;
 	v.PluginVersion(Version::MAJOR);
-	v.PluginName("Read Or Take Books");
+	v.PluginName("Use Or Take");
 	v.AuthorName("powerofthree");
 	v.UsesAddressLibrary(true);
 	v.CompatibleVersions({ SKSE::RUNTIME_LATEST });
@@ -34,7 +30,7 @@ extern "C" DLLEXPORT constinit auto SKSEPlugin_Version = []() {
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
 {
 	a_info->infoVersion = SKSE::PluginInfo::kVersion;
-	a_info->name = "Read Or Take Books";
+	a_info->name = "Use Or Take";
 	a_info->version = Version::MAJOR;
 
 	if (a_skse->IsEditor()) {
@@ -77,7 +73,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 {
 	InitializeLog();
 
-	logger::info("loaded");
+	logger::info("Game version : {}", a_skse->RuntimeVersion().string());
 
 	SKSE::Init(a_skse);
 

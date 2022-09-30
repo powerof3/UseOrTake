@@ -28,7 +28,11 @@ namespace Hooks
 			RE::TESBoundObject*,
 			std::int32_t a_targetCount)
 		{
-			constexpr auto do_secondary_action = [](RE::Actor* a_actor, RE::TESBoundObject* a_base) {
+			if (const auto light = a_this->As<RE::TESObjectLIGH>(); light && !light->CanBeCarried()) {
+				return false;
+			}
+
+		    constexpr auto do_secondary_action = [](RE::Actor* a_actor, RE::TESBoundObject* a_base) {
 				switch (a_base->GetFormType()) {
 				case RE::FormType::Scroll:
 					{
@@ -39,6 +43,7 @@ namespace Hooks
 					}
 					break;
 				case RE::FormType::Weapon:
+				case RE::FormType::Light:
 					{
 						RE::ActorEquipManager::GetSingleton()->EquipObject(a_actor, a_base);
 						a_actor->DrawWeaponMagicHands(true);
@@ -62,7 +67,7 @@ namespace Hooks
 						switch (action->GetDefaultAction()) {
 						case Action::kTake:
 							{
-								if (isHotKeyHeld && a_this->Is(RE::FormType::Scroll, RE::FormType::Weapon)) {
+								if (isHotKeyHeld && a_this->Is(RE::FormType::Scroll, RE::FormType::Weapon, RE::FormType::Light)) {
 									do_secondary_action(actor, a_this);
 								} else if (isHotKeyPressed) {
 									RE::ActorEquipManager::GetSingleton()->EquipObject(actor, a_this);
@@ -71,7 +76,7 @@ namespace Hooks
 							break;
 						case Action::kPrimaryAction:
 							{
-								if (isHotKeyHeld && a_this->Is(RE::FormType::Scroll, RE::FormType::Weapon)) {
+								if (isHotKeyHeld && a_this->Is(RE::FormType::Scroll, RE::FormType::Weapon, RE::FormType::Light)) {
 									do_secondary_action(actor, a_this);
 								} else if (!isHotKeyPressed) {
 									RE::ActorEquipManager::GetSingleton()->EquipObject(actor, a_this);
@@ -125,6 +130,11 @@ namespace Hooks
 		if (const auto scrollAction = settings->GetActionForType(RE::FormType::Scroll); scrollAction && scrollAction->IsEnabled()) {
 			stl::write_vfunc<RE::ScrollItem, Activate>();
 			stl::write_vfunc<RE::ScrollItem, GetActivateText>();
+		}
+
+		if (const auto torchAction = settings->GetActionForType(RE::FormType::Light); torchAction && torchAction->IsEnabled()) {
+			stl::write_vfunc<RE::TESObjectLIGH, Activate>();
+			stl::write_vfunc<RE::TESObjectLIGH, GetActivateText>();
 		}
 	}
 }

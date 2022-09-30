@@ -37,6 +37,7 @@ private:
 	AlchemyAction alchemy;
 	Action ingestibles;
 	SecondaryAction scrolls;
+	SecondaryAction torches;
 
 	Key hotKey;
 	bool keyPressed;
