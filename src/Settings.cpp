@@ -27,7 +27,7 @@ Settings::Settings() :
 
 	scrolls = SecondaryAction(ini, "Scrolls", "Equip", "Read", ";0 - Take | 1 - Equip | 2 - Read (cast scrolls).", false);
 
-	torches = SecondaryAction(ini, "Torches", "Equip", "Equip and draw", ";0 - Take | 1 - Equip | 2 - Equip and Draw", true);
+	torches = Action(ini, "Torches", "Equip", ";0 - Take | 1 - Equip.", false);
 
 	(void)ini.SaveFile(path.c_str());
 }

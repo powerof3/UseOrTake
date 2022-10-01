@@ -61,10 +61,10 @@ namespace Event
 			return EventResult::kContinue;
 		}
 
-		auto settings = Settings::GetSingleton();
+		const auto settings = Settings::GetSingleton();
 
-		auto hotKey = settings->GetHotkey();
-		auto keyHeldDur = settings->GetKeyHeldDuration();
+		const auto hotKey = settings->GetHotkey();
+		const auto keyHeldDur = settings->GetKeyHeldDuration();
 
 		for (auto event = *a_evn; event; event = event->next) {
 			if (const auto button = event->AsButtonEvent(); button) {

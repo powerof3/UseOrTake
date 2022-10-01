@@ -28,11 +28,7 @@ namespace Hooks
 			RE::TESBoundObject*,
 			std::int32_t a_targetCount)
 		{
-			if (const auto light = a_this->As<RE::TESObjectLIGH>(); light && !light->CanBeCarried()) {
-				return false;
-			}
-
-		    constexpr auto do_secondary_action = [](RE::Actor* a_actor, RE::TESBoundObject* a_base) {
+			constexpr auto do_secondary_action = [](RE::Actor* a_actor, RE::TESBoundObject* a_base) {
 				switch (a_base->GetFormType()) {
 				case RE::FormType::Scroll:
 					{
@@ -43,7 +39,6 @@ namespace Hooks
 					}
 					break;
 				case RE::FormType::Weapon:
-				case RE::FormType::Light:
 					{
 						RE::ActorEquipManager::GetSingleton()->EquipObject(a_actor, a_base);
 						a_actor->DrawWeaponMagicHands(true);
@@ -54,40 +49,41 @@ namespace Hooks
 				}
 			};
 
+			if (const auto light = a_this->As<RE::TESObjectLIGH>(); light && !light->CanBeCarried()) {
+				return false;
+			}
+
 			if (a_targetRef && a_activatorRef) {
 				if (const auto actor = a_activatorRef->As<RE::Actor>(); actor) {
 					const auto settings = Settings::GetSingleton();
 
-					if (const auto action = settings->GetActionForType(a_this->GetFormType()); action) {
-						bool isHotKeyPressed = settings->GetHotkeyPressed();
-						bool isHotKeyHeld = settings->GetHotkeyHeld();
+					actor->PickUpObject(a_targetRef, a_targetCount, a_arg3, true);
 
-						actor->PickUpObject(a_targetRef, a_targetCount, a_arg3, true);
-
+				    if (const auto action = settings->GetActionForType(a_this->GetFormType()); action) {
 						switch (action->GetDefaultAction()) {
 						case Action::kTake:
 							{
-								if (isHotKeyHeld && a_this->Is(RE::FormType::Scroll, RE::FormType::Weapon, RE::FormType::Light)) {
+								if (settings->GetHotkeyHeld() && a_this->Is(RE::FormType::Scroll, RE::FormType::Weapon)) {
 									do_secondary_action(actor, a_this);
-								} else if (isHotKeyPressed) {
+								} else if (settings->GetHotkeyPressed()) {
 									RE::ActorEquipManager::GetSingleton()->EquipObject(actor, a_this);
 								}
 							}
 							break;
 						case Action::kPrimaryAction:
 							{
-								if (isHotKeyHeld && a_this->Is(RE::FormType::Scroll, RE::FormType::Weapon, RE::FormType::Light)) {
+								if (settings->GetHotkeyHeld() && a_this->Is(RE::FormType::Scroll, RE::FormType::Weapon)) {
 									do_secondary_action(actor, a_this);
-								} else if (!isHotKeyPressed) {
+								} else if (!settings->GetHotkeyPressed()) {
 									RE::ActorEquipManager::GetSingleton()->EquipObject(actor, a_this);
 								}
 							}
 							break;
 						case Action::kSecondaryAction:
 							{
-								if (isHotKeyHeld) {
+								if (settings->GetHotkeyHeld()) {
 									RE::ActorEquipManager::GetSingleton()->EquipObject(actor, a_this);
-								} else if (!isHotKeyPressed) {
+								} else if (!settings->GetHotkeyPressed()) {
 									do_secondary_action(actor, a_this);
 								}
 							}

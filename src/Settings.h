@@ -37,10 +37,11 @@ private:
 	AlchemyAction alchemy;
 	Action ingestibles;
 	SecondaryAction scrolls;
-	SecondaryAction torches;
+	Action torches;
 
 	Key hotKey;
-	bool keyPressed;
-	bool keyHeld;
 	float keyHeldDuration;
+
+	std::atomic_bool keyPressed;
+	std::atomic_bool keyHeld;
 };
