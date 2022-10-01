@@ -59,7 +59,11 @@ namespace Hooks
 
 					actor->PickUpObject(a_targetRef, a_targetCount, a_arg3, true);
 
-					if (const auto action = settings->GetActionForType(a_this->GetFormType()); action) {
+					if (!actor->IsPlayerRef()) {
+						return true;
+					}
+
+				    if (const auto action = settings->GetActionForType(a_this->GetFormType()); action) {
 						switch (action->GetDefaultAction()) {
 						case Action::kTake:
 							{
@@ -103,9 +107,9 @@ namespace Hooks
 	{
 		logger::info("{:*^30}", "HOOKS");
 
-	    const auto settings = Settings::GetSingleton();
+		const auto settings = Settings::GetSingleton();
 
-	    if (const auto armorAction = settings->GetActionForType(RE::FormType::Armor); armorAction && armorAction->IsEnabled()) {
+		if (const auto armorAction = settings->GetActionForType(RE::FormType::Armor); armorAction && armorAction->IsEnabled()) {
 			stl::write_vfunc<RE::TESObjectARMO, Activate>();
 			stl::write_vfunc<RE::TESObjectARMO, GetActivateText>();
 
