@@ -29,6 +29,8 @@ Settings::Settings() :
 
 	torches = Action(ini, "Torches", "Equip", ";0 - Take | 1 - Equip.", false);
 
+	ammo = Action(ini, "Ammo", "Equip", ";0 - Take | 1 - Equip.", false);
+
 	(void)ini.SaveFile(path.c_str());
 }
 
@@ -47,6 +49,8 @@ Action* Settings::GetActionForType(RE::FormType a_type)
 		return &alchemy;
 	case RE::FormType::Light:
 		return &torches;
+	case RE::FormType::Ammo:
+		return &ammo;
 	default:
 		return nullptr;
 	}

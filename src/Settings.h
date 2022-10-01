@@ -38,6 +38,7 @@ private:
 	Action ingestibles;
 	SecondaryAction scrolls;
 	Action torches;
+	Action ammo;
 
 	Key hotKey;
 	float keyHeldDuration;
