@@ -37,9 +37,17 @@ std::string Action::get_take_label(RE::TESObjectREFR* a_activator)
 std::string Action::get_alt_action_label(RE::TESObjectREFR* a_activator, const std::string& a_label)
 {
 	if (a_activator->IsCrimeToActivate()) {
-		return fmt::format("<font color='#FF0000'>{}</font>\n{}", a_label, a_activator->GetDisplayFullName());
+		if (const auto count = a_activator->extraList.GetCount(); count > 1) {
+			return fmt::format("<font color='#FF0000'>{}</font>\n{} ({})", a_label, a_activator->GetDisplayFullName(), count);
+		} else {
+			return fmt::format("<font color='#FF0000'>{}</font>\n{}", a_label, a_activator->GetDisplayFullName());
+		}
 	} else {
-		return fmt::format("{}\n{}", a_label, a_activator->GetDisplayFullName());
+		if (const auto count = a_activator->extraList.GetCount(); count > 1) {
+			return fmt::format("{}\n{} ({})", a_label, a_activator->GetDisplayFullName(), count);
+		} else {
+			return fmt::format("{}\n{}", a_label, a_activator->GetDisplayFullName());
+		}
 	}
 }
 
