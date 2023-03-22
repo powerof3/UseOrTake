@@ -11,11 +11,8 @@ Settings::Settings() :
 
 	ini.LoadFile(path.c_str());
 
-	hotKey = string::lexical_cast<Key>(ini.GetValue("Settings", "Alternate action hotkey", "42"));  //Left Shift
-	ini.SetValue("Settings", "Alternate action hotkey", std::to_string(hotKey).c_str(), ";Press hotkey + Activate key to perform alternative action. Default is Left Shift\n;Hold hotkey to perform secondary action, if available.\n\n;Keyboard scan codes : https://wiki.nexusmods.com/index.php/DirectX_Scancodes_And_How_To_Use_Them\n;Gamepad scan codes : https://geckwiki.com/index.php?title=DisableButton#XBox_Controller_Button_Codes");
-
-	keyHeldDuration = static_cast<float>(ini.GetDoubleValue("Settings", "Hotkey hold duration", 0.7));
-	ini.SetDoubleValue("Settings", "Hotkey hold duration", keyHeldDuration, ";How long should the hotkey be held down (in seconds) before switching to secondary action.");
+	ini::get_value(ini, hotKey, "Settings", "Alternate action hotkey", ";Press hotkey + Activate key to perform alternative action. Default is Left Shift\n;Hold hotkey to perform secondary action, if available.\n\n;DXScanCodes : https://www.creationkit.com/index.php?title=Input_Script");
+	ini::get_value(ini, keyHeldDuration, "Settings", "Hotkey hold duration", ";How long should the hotkey be held down (in seconds) before switching to secondary action.");
 
 	armors = Action(ini, "Armors", "Equip", ";Default action upon activating\n;0 - Take | 1 - Equip.", true);
 

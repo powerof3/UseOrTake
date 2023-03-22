@@ -32,8 +32,10 @@ namespace Hooks
 				switch (a_base->GetFormType()) {
 				case RE::FormType::Scroll:
 					{
-						if (const auto scroll = a_base->As<RE::ScrollItem>(); scroll) {
-							a_actor->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant)->CastSpellImmediate(scroll, false, a_actor, 1.0f, false, 0.0f, nullptr);
+						if (const auto scroll = a_base->As<RE::ScrollItem>()) {
+							if (const auto caster = a_actor->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant)) {
+								caster->CastSpellImmediate(scroll, false, a_actor, 1.0f, false, 0.0f, nullptr);
+							}
 							a_actor->RemoveItem(scroll, 1, RE::ITEM_REMOVE_REASON::kRemove, nullptr, nullptr);
 						}
 					}
@@ -54,14 +56,14 @@ namespace Hooks
 			}
 
 			if (a_targetRef && a_activatorRef) {
-				if (const auto actor = a_activatorRef->As<RE::Actor>(); actor) {
-					const auto settings = Settings::GetSingleton();
-
+				if (const auto actor = a_activatorRef->As<RE::Actor>()) {
 					actor->PickUpObject(a_targetRef, a_targetCount, a_arg3, true);
 
 					if (!actor->IsPlayerRef()) {
 						return true;
 					}
+
+					const auto settings = Settings::GetSingleton();
 
 				    if (const auto action = settings->GetActionForType(a_this->GetFormType()); action) {
 						switch (action->GetDefaultAction()) {
@@ -91,6 +93,8 @@ namespace Hooks
 									do_secondary_action(actor, a_this);
 								}
 							}
+							break;
+						default:
 							break;
 						}
 					}

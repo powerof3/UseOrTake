@@ -2,7 +2,7 @@
 
 Action::Action(CSimpleIniA& a_ini, const char* a_section, const char* a_label, const char* a_actionComment, bool a_doComment) :
 	enabled(a_ini.GetBoolValue(a_section, "Enabled", true)),
-	action(string::lexical_cast<Type>(a_ini.GetValue(a_section, "Default action", "0"))),  //kTake
+	action(string::to_num<Type>(a_ini.GetValue(a_section, "Default action", "0"))),  //kTake
 	primaryActionLabel(a_ini.GetValue(a_section, "Alternate action label", a_label))
 {
 	a_ini.SetBoolValue(a_section, "Enabled", enabled, nullptr);
@@ -82,13 +82,13 @@ const std::string& AlchemyAction::GetLabelForAlchType(RE::TESBoundObject* a_base
 {
 	if (const auto alch = a_base->As<RE::AlchemyItem>(); alch) {
 		if (alch->IsFood()) {
-			if (const auto useSound = alch->data.consumptionSound; useSound && useSound->GetFormID() == 0x000B6435) {  //ITMPotionUse
-				return primaryActionLabel;                                                                             //Drink
+			if (const auto useSound = alch->data.consumptionSound; useSound && useSound->GetFormID() == 0x000B6435) {  // ITMPotionUse
+				return primaryActionLabel;                                                                             // Drink
 			}
-			return foodActionLabel;  //Eat
+			return foodActionLabel;  // Eat
 		}
 		if (alch->IsPoison()) {
-			return poisonActionLabel;  //Apply
+			return poisonActionLabel;  // Apply
 		}
 	}
 

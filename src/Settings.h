@@ -40,8 +40,8 @@ private:
 	Action torches;
 	Action ammo;
 
-	Key hotKey;
-	float keyHeldDuration;
+	Key hotKey{ 42 };
+	float keyHeldDuration{ 0.7f };
 
 	std::atomic_bool keyPressed;
 	std::atomic_bool keyHeld;

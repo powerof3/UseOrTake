@@ -11,22 +11,20 @@ public:
 	};
 
 	Action() = default;
-    virtual ~Action() = default;
+	virtual ~Action() = default;
 
 	Action(CSimpleIniA& a_ini, const char* a_section, const char* a_label, const char* a_actionComment, bool a_doComment);
 
 	[[nodiscard]] bool IsEnabled() const;
-	
 	[[nodiscard]] Type GetDefaultAction() const;
 
-	[[nodiscard]] virtual std::string GetActionLabel(RE::TESObjectREFR* a_activator, RE::TESBoundObject* a_base, bool a_keyPressed, bool a_keyHeld) const;
+    [[nodiscard]] virtual std::string GetActionLabel(RE::TESObjectREFR* a_activator, RE::TESBoundObject* a_base, bool a_keyPressed, bool a_keyHeld) const;
 
 protected:
-    static std::string get_take_label(RE::TESObjectREFR* a_activator);
-
+	static std::string get_take_label(RE::TESObjectREFR* a_activator);
 	static std::string get_alt_action_label(RE::TESObjectREFR* a_activator, const std::string& a_label);
 
-    bool enabled;
+	bool enabled;
 	Type action;
 	std::string primaryActionLabel;
 };
@@ -55,7 +53,7 @@ public:
 		kFood
 	};
 
-    AlchemyAction() = default;
+	AlchemyAction() = default;
 	~AlchemyAction() override = default;
 
 	AlchemyAction(CSimpleIniA& a_ini, const char* a_section, const char* a_label, const char* a_foodLabel, const char* a_poisonLabel, const char* a_actionComment);
@@ -65,6 +63,6 @@ public:
 private:
 	[[nodiscard]] const std::string& GetLabelForAlchType(RE::TESBoundObject* a_base) const;
 
-    std::string foodActionLabel;
-    std::string poisonActionLabel;
+	std::string foodActionLabel;
+	std::string poisonActionLabel;
 };

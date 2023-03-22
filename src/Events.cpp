@@ -20,24 +20,15 @@ namespace Event
 		}
 	}
 
-	struct detail
-	{
-		static void UpdateCrosshairs(RE::PlayerCharacter* a_player)
-		{
-			using func_t = decltype(&UpdateCrosshairs);
-			REL::Relocation<func_t> func{ RELOCATION_ID(39535, 40621) };
-			return func(a_player);
-		}
-	};
-
 	void Manager::UpdateCrosshairs()
 	{
 		if (const auto crossHairPickData = RE::CrosshairPickData::GetSingleton()) {
 			const auto target = crossHairPickData->target.get();
 			const auto base = target ? target->GetBaseObject() : nullptr;
+			const auto action = base ? Settings::GetSingleton()->GetActionForType(base->GetFormType()) : nullptr;
 
-			if (const auto action = base ? Settings::GetSingleton()->GetActionForType(base->GetFormType()) : nullptr; action && action->IsEnabled()) {
-				detail::UpdateCrosshairs(RE::PlayerCharacter::GetSingleton());
+			if (action && action->IsEnabled()) {
+				RE::PlayerCharacter::GetSingleton()->UpdateCrosshairs();
 			}
 		}
 	}
@@ -50,14 +41,14 @@ namespace Event
 			return EventResult::kContinue;
 		}
 
-		auto player = RE::PlayerCharacter::GetSingleton();
+		const auto player = RE::PlayerCharacter::GetSingleton();
 		if (!player || !player->Is3DLoaded()) {
 			return EventResult::kContinue;
 		}
 
 		const auto UI = RE::UI::GetSingleton();
 
-		if (!UI || UI->IsMenuOpen(RE::Console::MENU_NAME)) {
+		if (!UI || UI->IsMenuOpen(RE::Console::MENU_NAME) || UI->GameIsPaused()) {
 			return EventResult::kContinue;
 		}
 
@@ -68,7 +59,22 @@ namespace Event
 
 		for (auto event = *a_evn; event; event = event->next) {
 			if (const auto button = event->AsButtonEvent(); button) {
-				if (const auto key = static_cast<Key>(button->GetIDCode()); key == hotKey) {
+                const auto device = event->GetDevice();
+
+			    auto key = button->GetIDCode();
+
+				switch (device) {
+				case RE::INPUT_DEVICE::kMouse:
+					key += SKSE::InputMap::kMacro_MouseButtonOffset;
+					break;
+				case RE::INPUT_DEVICE::kGamepad:
+					key = SKSE::InputMap::GamepadMaskToKeycode(key);
+					break;
+				default:
+					break;
+				}
+
+			    if (key == hotKey) {
 					if (settings->GetHotkeyPressed() != button->IsPressed()) {
 						settings->SetHotkeyPressed(button->IsPressed());
 
