@@ -7,7 +7,7 @@ Action::Action(CSimpleIniA& a_ini, const char* a_section, const char* a_label, c
 {
 	a_ini.SetBoolValue(a_section, "Enabled", enabled, nullptr);
 	a_ini.SetValue(a_section, "Default action", std::to_string(action).c_str(), a_actionComment);
-	a_ini.SetValue(a_section, "Alternate action label", primaryActionLabel.c_str(), a_doComment ? ";Activate label when hovering over the item, ie. 'Equip' for armor/weapons" : nullptr);
+	a_ini.SetValue(a_section, "Alternate action label", primaryActionLabel.c_str(), a_doComment ? ";Activate label when hovering over the item, ie. 'Equip' for armor/weapons" : ";");
 }
 
 bool Action::IsEnabled() const
@@ -65,8 +65,8 @@ AlchemyAction::AlchemyAction(CSimpleIniA& a_ini, const char* a_section, const ch
 	foodActionLabel(a_ini.GetValue(a_section, "Alternate action label (Food)", a_foodLabel)),
 	poisonActionLabel(a_ini.GetValue(a_section, "Alternate action label (Poison)", a_poisonLabel))
 {
-	a_ini.SetValue(a_section, "Alternate action label (Food)", foodActionLabel.c_str(), ";Activate label for eating food");
-	a_ini.SetValue(a_section, "Alternate action label (Poison)", poisonActionLabel.c_str(), ";Activate label for applying poisons");
+	a_ini.SetValue(a_section, "Alternate action label (Food)", foodActionLabel.c_str(), ";Activate label for eating food.");
+	a_ini.SetValue(a_section, "Alternate action label (Poison)", poisonActionLabel.c_str(), ";Activate label for applying poisons.");
 }
 
 std::string AlchemyAction::GetActionLabel(RE::TESObjectREFR* a_activator, RE::TESBoundObject* a_base, bool a_keyPressed, bool) const
@@ -99,7 +99,7 @@ SecondaryAction::SecondaryAction(CSimpleIniA& a_ini, const char* a_section, cons
 	Action(a_ini, a_section, a_label, a_actionComment, false),
 	secondaryActionLabel(a_ini.GetValue(a_section, "Alternate secondary action label", a_secondarylabel))
 {
-	a_ini.SetValue(a_section, "Alternate secondary action label", secondaryActionLabel.c_str(), a_doComment ? ";Activate label for secondary action (eg. 'Equip and draw' weapons)" : nullptr);
+	a_ini.SetValue(a_section, "Alternate secondary action label", secondaryActionLabel.c_str(), a_doComment ? ";Activate label for secondary action (eg. 'Equip and draw' weapons)" : ";");
 }
 
 std::string SecondaryAction::GetActionLabel(RE::TESObjectREFR* a_activator, RE::TESBoundObject*, bool a_keyPressed, bool a_keyHeld) const

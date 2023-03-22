@@ -16,7 +16,7 @@ Settings::Settings() :
 
 	armors = Action(ini, "Armors", "Equip", ";Default action upon activating\n;0 - Take | 1 - Equip.", true);
 
-	weapons = SecondaryAction(ini, "Weapons", "Equip", "Equip and draw", ";0 - Take | 1 - Equip | 2 - Equip and Draw", true);
+	weapons = SecondaryAction(ini, "Weapons", "Equip", "Equip and draw", ";0 - Take | 1 - Equip | 2 - Equip and Draw.", true);
 
 	alchemy = AlchemyAction(ini, "Potions", "Drink", "Eat", "Apply", ";0 - Take | 1 - Drink potion/Eat food/Apply poison.");
 
