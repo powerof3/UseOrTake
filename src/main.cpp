@@ -22,7 +22,7 @@ extern "C" DLLEXPORT constinit auto SKSEPlugin_Version = []() {
 	v.PluginName("Use Or Take");
 	v.AuthorName("powerofthree");
 	v.UsesAddressLibrary();
-	v.UsesNoStructs();
+	v.UsesUpdatedStructs();
 	v.CompatibleVersions({ SKSE::RUNTIME_LATEST });
 
 	return v;
