@@ -43,7 +43,11 @@ namespace Hooks
 				case RE::FormType::Weapon:
 					{
 						RE::ActorEquipManager::GetSingleton()->EquipObject(a_actor, a_base);
-						a_actor->DrawWeaponMagicHands(true);
+						if (const RE::ActorState* actorState = a_actor->As<RE::ActorState>()) {
+							if (!actorState->IsWeaponDrawn()) {
+								a_actor->DrawWeaponMagicHands(true);
+							}
+						}
 					}
 					break;
 				default:
