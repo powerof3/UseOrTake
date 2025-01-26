@@ -9,12 +9,13 @@ void Manager::LoadSettings()
 
 	ini.LoadFile(path.c_str());
 
-	ini::get_value(ini, hotKey, "Settings", "Alternate action hotkey", ";Press hotkey + Activate key to perform alternative action. Default is Left Shift\n;Hold hotkey to perform secondary action, if available.\n\n;DXScanCodes : https://www.creationkit.com/index.php?title=Input_Script");
+	ini::get_value(ini, hotKey, "Settings", "Alternate action hotkey", ";Press hotkey + Activate key to perform alternative action. Default is Left Shift\n;Hold hotkey to perform secondary action, if available.\n\n;DXScanCodes : https://ck.uesp.net/wiki/Input_Script");
+	ini::get_value(ini, hotKeyGamePad, "Settings", "Alternate action hotkey (Gamepad)", ";");
 	ini::get_value(ini, keyHeldDuration, "Settings", "Hotkey hold duration", ";How long should the hotkey be held down (in seconds) before switching to secondary action.");
 
 	armors = Action(ini, "Armors", "Equip", ";Default action upon activating\n;0 - Take | 1 - Equip.", true);
 
-	weapons = SecondaryAction(ini, "Weapons", "Equip", "Equip and draw", ";0 - Take | 1 - Equip | 2 - Equip and Draw.", true);
+	weapons = SecondaryAction(ini, "Weapons", "Equip", "Equip and Draw", ";0 - Take | 1 - Equip | 2 - Equip and Draw.", true);
 
 	alchemy = AlchemyAction(ini, "Potions", "Drink", "Eat", "Apply", ";0 - Take | 1 - Drink potion/Eat food/Apply poison.");
 
@@ -65,6 +66,11 @@ Action* Manager::GetActionForType(RE::FormType a_type)
 Key Manager::GetHotkey() const
 {
 	return hotKey;
+}
+
+Key Manager::GetHotkeyGamePad() const
+{
+	return hotKeyGamePad;
 }
 
 bool Manager::GetHotkeyPressed() const
@@ -138,7 +144,7 @@ RE::BSEventNotifyControl Manager::ProcessEvent(RE::InputEvent* const* a_evn, RE:
 				break;
 			}
 
-			if (key == GetHotkey()) {
+			if (key == GetHotkey() || (device == RE::INPUT_DEVICE::kGamepad && key == GetHotkeyGamePad())) {
 				if (GetHotkeyPressed() != buttonEvent->IsPressed()) {
 					SetHotkeyPressed(buttonEvent->IsPressed());
 

@@ -99,7 +99,7 @@ SecondaryAction::SecondaryAction(CSimpleIniA& a_ini, const char* a_section, cons
 	Action(a_ini, a_section, a_label, a_actionComment, false),
 	secondaryActionLabel(a_ini.GetValue(a_section, "Alternate secondary action label", a_secondarylabel))
 {
-	a_ini.SetValue(a_section, "Alternate secondary action label", secondaryActionLabel.c_str(), a_doComment ? ";Activate label for secondary action (eg. 'Equip and draw' weapons)" : ";");
+	a_ini.SetValue(a_section, "Alternate secondary action label", secondaryActionLabel.c_str(), a_doComment ? ";Activate label for secondary action (eg. 'Equip and Draw' weapons)" : ";");
 }
 
 std::string SecondaryAction::GetActionLabel(RE::TESObjectREFR* a_activator, RE::TESBoundObject*, bool a_keyPressed, bool a_keyHeld) const

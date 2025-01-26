@@ -12,6 +12,7 @@ public:
 
 	[[nodiscard]] Action* GetActionForType(RE::FormType a_type);
 	[[nodiscard]] Key     GetHotkey() const;
+	[[nodiscard]] Key     GetHotkeyGamePad() const;
 
 	[[nodiscard]] bool GetHotkeyPressed() const;
 	void               SetHotkeyPressed(bool a_pressed);
@@ -36,6 +37,7 @@ private:
 	Action          ammo;
 
 	Key   hotKey{ 42 };
+	Key   hotKeyGamePad{ 0 };
 	float keyHeldDuration{ 0.7f };
 
 	std::atomic_bool keyPressed{ false };
