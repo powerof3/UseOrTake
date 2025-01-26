@@ -1,14 +1,14 @@
 {
   "name": "use-or-take",
-  "version-string": "1.2.0",
+  "version-string": "1.3.0",
   "description": "",
   "homepage": "",
   "license": "MIT",
   "dependencies": [
-    "boost-stl-interfaces",
     "clib-util",
     "rsm-binary-io",
     "spdlog",
     "xbyak"
-  ]
+  ],
+  "builtin-baseline": "57c08a3223a1ec03c3a31986ee38d32e90b6039c"
 }

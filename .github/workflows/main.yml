@@ -13,10 +13,10 @@ jobs:
   run:
     uses: adya/pack-skse-mod/.github/workflows/pack.yml@main
     with:
-      AE_353_BRANCH: master-1.6.353
       FOMOD_INCLUDE_PDB: true
       FOMOD_MOD_NAME: "Use Or Take SKSE"
       FOMOD_MOD_AUTHOR: "powerofthree"
       FOMOD_MOD_NEXUS_ID: "70868"
       FOMOD_REQUIRED_INSTALLATION_DIR: "Skyrim/Data"
       PUBLISH_ARCHIVE_TYPE: '7z'
+      VCPKG_COMMIT_ID: '57c08a3223a1ec03c3a31986ee38d32e90b6039c'

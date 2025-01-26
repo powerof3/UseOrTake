@@ -1,5 +1,6 @@
 #include "Hooks.h"
-#include "Settings.h"
+
+#include "Manager.h"
 
 namespace Hooks
 {
@@ -7,7 +8,7 @@ namespace Hooks
 	{
 		static bool thunk(RE::TESBoundObject* a_this, RE::TESObjectREFR* a_activator, RE::BSString& a_dst)
 		{
-			const auto settings = Settings::GetSingleton();
+			const auto settings = Manager::GetSingleton();
 			const auto action = settings->GetActionForType(a_this->GetFormType());
 
 			a_dst = action->GetActionLabel(a_activator, a_this, settings->GetHotkeyPressed(), settings->GetHotkeyHeld());
@@ -15,20 +16,15 @@ namespace Hooks
 			return true;
 		}
 		static inline REL::Relocation<decltype(thunk)> func;
-
-		static inline constexpr std::size_t size = 0x4C;
+		static inline constexpr std::size_t            idx{ 0x4C };
 	};
 
 	struct Activate
 	{
-		static bool thunk(RE::TESBoundObject* a_this,
-			RE::TESObjectREFR* a_targetRef,
-			RE::TESObjectREFR* a_activatorRef,
-			std::uint8_t a_arg3,
-			RE::TESBoundObject*,
-			std::int32_t a_targetCount)
+		struct detail
 		{
-			constexpr auto do_secondary_action = [](RE::Actor* a_actor, RE::TESBoundObject* a_base) {
+			static void do_secondary_action(RE::Actor* a_actor, RE::TESBoundObject* a_base)
+			{
 				switch (a_base->GetFormType()) {
 				case RE::FormType::Scroll:
 					{
@@ -43,10 +39,8 @@ namespace Hooks
 				case RE::FormType::Weapon:
 					{
 						RE::ActorEquipManager::GetSingleton()->EquipObject(a_actor, a_base);
-						if (const RE::ActorState* actorState = a_actor->As<RE::ActorState>()) {
-							if (!actorState->IsWeaponDrawn()) {
-								a_actor->DrawWeaponMagicHands(true);
-							}
+						if (const RE::ActorState* actorState = a_actor->As<RE::ActorState>(); actorState && !actorState->IsWeaponDrawn()) {
+							a_actor->DrawWeaponMagicHands(true);
 						}
 					}
 					break;
@@ -54,7 +48,10 @@ namespace Hooks
 					break;
 				}
 			};
+		};
 
+		static bool thunk(RE::TESBoundObject* a_this, RE::TESObjectREFR* a_targetRef, RE::TESObjectREFR* a_activatorRef, std::uint8_t a_arg3, RE::TESBoundObject*, std::int32_t a_targetCount)
+		{
 			if (const auto light = a_this->As<RE::TESObjectLIGH>(); light && !light->CanBeCarried()) {
 				return false;
 			}
@@ -67,14 +64,14 @@ namespace Hooks
 						return true;
 					}
 
-					const auto settings = Settings::GetSingleton();
+					const auto settings = Manager::GetSingleton();
 
-				    if (const auto action = settings->GetActionForType(a_this->GetFormType()); action) {
+					if (const auto action = settings->GetActionForType(a_this->GetFormType()); action) {
 						switch (action->GetDefaultAction()) {
 						case Action::kTake:
 							{
 								if (settings->GetHotkeyHeld() && a_this->Is(RE::FormType::Scroll, RE::FormType::Weapon)) {
-									do_secondary_action(actor, a_this);
+									detail::do_secondary_action(actor, a_this);
 								} else if (settings->GetHotkeyPressed()) {
 									RE::ActorEquipManager::GetSingleton()->EquipObject(actor, a_this);
 								}
@@ -83,7 +80,7 @@ namespace Hooks
 						case Action::kPrimaryAction:
 							{
 								if (settings->GetHotkeyHeld() && a_this->Is(RE::FormType::Scroll, RE::FormType::Weapon)) {
-									do_secondary_action(actor, a_this);
+									detail::do_secondary_action(actor, a_this);
 								} else if (!settings->GetHotkeyPressed()) {
 									RE::ActorEquipManager::GetSingleton()->EquipObject(actor, a_this);
 								}
@@ -94,7 +91,7 @@ namespace Hooks
 								if (settings->GetHotkeyHeld()) {
 									RE::ActorEquipManager::GetSingleton()->EquipObject(actor, a_this);
 								} else if (!settings->GetHotkeyPressed()) {
-									do_secondary_action(actor, a_this);
+									detail::do_secondary_action(actor, a_this);
 								}
 							}
 							break;
@@ -107,15 +104,14 @@ namespace Hooks
 			return true;
 		}
 		static inline REL::Relocation<decltype(thunk)> func;
-
-		static inline constexpr std::size_t size = 0x37;
+		static inline constexpr std::size_t            idx{ 0x37 };
 	};
 
 	void Install()
 	{
 		logger::info("{:*^30}", "HOOKS");
 
-		const auto settings = Settings::GetSingleton();
+		const auto settings = Manager::GetSingleton();
 
 		if (const auto armorAction = settings->GetActionForType(RE::FormType::Armor); armorAction && armorAction->IsEnabled()) {
 			stl::write_vfunc<RE::TESObjectARMO, Activate>();

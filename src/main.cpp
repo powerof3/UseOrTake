@@ -1,14 +1,17 @@
-#include "Events.h"
 #include "Hooks.h"
+#include "Manager.h"
 
 void MessageHandler(SKSE::MessagingInterface::Message* a_message)
 {
 	switch (a_message->type) {
 	case SKSE::MessagingInterface::kPostLoad:
-		Hooks::Install();
+		{
+			Manager::GetSingleton()->LoadSettings();
+			Hooks::Install();
+		}
 		break;
 	case SKSE::MessagingInterface::kDataLoaded:
-		Event::Manager::Register();
+		Manager::Register();
 		break;
 	default:
 		break;
@@ -76,7 +79,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 
 	logger::info("Game version : {}", a_skse->RuntimeVersion().string());
 
-	SKSE::Init(a_skse);
+	SKSE::Init(a_skse, false);
 
 	const auto messaging = SKSE::GetMessagingInterface();
 	messaging->RegisterListener(MessageHandler);

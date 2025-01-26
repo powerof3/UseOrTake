@@ -24,13 +24,13 @@ std::string Action::get_take_label(RE::TESObjectREFR* a_activator)
 {
 	constexpr auto get_take_or_steal = [](RE::TESObjectREFR* b_activator) {
 		return b_activator->IsCrimeToActivate() ? RE::GameSettingCollection::GetSingleton()->GetSetting("sSteal")->GetString() :
-                                                  RE::GameSettingCollection::GetSingleton()->GetSetting("sTake")->GetString();
+		                                          RE::GameSettingCollection::GetSingleton()->GetSetting("sTake")->GetString();
 	};
 
 	if (const auto count = a_activator->extraList.GetCount(); count > 1) {
-		return fmt::format("{}\n{} ({})", get_take_or_steal(a_activator), a_activator->GetDisplayFullName(), count);
+		return std::format("{}\n{} ({})", get_take_or_steal(a_activator), a_activator->GetDisplayFullName(), count);
 	} else {
-		return fmt::format("{}\n{}", get_take_or_steal(a_activator), a_activator->GetDisplayFullName());
+		return std::format("{}\n{}", get_take_or_steal(a_activator), a_activator->GetDisplayFullName());
 	}
 }
 
@@ -38,15 +38,15 @@ std::string Action::get_alt_action_label(RE::TESObjectREFR* a_activator, const s
 {
 	if (a_activator->IsCrimeToActivate()) {
 		if (const auto count = a_activator->extraList.GetCount(); count > 1) {
-			return fmt::format("<font color='#FF0000'>{}</font>\n{} ({})", a_label, a_activator->GetDisplayFullName(), count);
+			return std::format("<font color='#FF0000'>{}</font>\n{} ({})", a_label, a_activator->GetDisplayFullName(), count);
 		} else {
-			return fmt::format("<font color='#FF0000'>{}</font>\n{}", a_label, a_activator->GetDisplayFullName());
+			return std::format("<font color='#FF0000'>{}</font>\n{}", a_label, a_activator->GetDisplayFullName());
 		}
 	} else {
 		if (const auto count = a_activator->extraList.GetCount(); count > 1) {
-			return fmt::format("{}\n{} ({})", a_label, a_activator->GetDisplayFullName(), count);
+			return std::format("{}\n{} ({})", a_label, a_activator->GetDisplayFullName(), count);
 		} else {
-			return fmt::format("{}\n{}", a_label, a_activator->GetDisplayFullName());
+			return std::format("{}\n{}", a_label, a_activator->GetDisplayFullName());
 		}
 	}
 }
