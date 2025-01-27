@@ -148,7 +148,7 @@ RE::BSEventNotifyControl Manager::ProcessEvent(RE::InputEvent* const* a_evn, RE:
 				if (GetHotkeyPressed() != buttonEvent->IsPressed()) {
 					SetHotkeyPressed(buttonEvent->IsPressed());
 
-					if (!GetHotkeyPressed()) {
+					if (!buttonEvent->IsPressed()) {
 						SetHotkeyHeld(false);
 					}
 
@@ -157,6 +157,9 @@ RE::BSEventNotifyControl Manager::ProcessEvent(RE::InputEvent* const* a_evn, RE:
 					SetHotkeyHeld(true);
 
 					UpdateCrosshairs();
+				} else if (!buttonEvent->IsPressed()) {
+					SetHotkeyPressed(false);
+					SetHotkeyHeld(false);
 				}
 			}
 		}
