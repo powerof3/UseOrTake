@@ -109,7 +109,7 @@ namespace Hooks
 
 	void Install()
 	{
-		logger::info("{:*^30}", "HOOKS");
+		REX::INFO("{:*^30}", "HOOKS");
 
 		const auto settings = Manager::GetSingleton();
 
@@ -117,49 +117,49 @@ namespace Hooks
 			stl::write_vfunc<RE::TESObjectARMO, Activate>();
 			stl::write_vfunc<RE::TESObjectARMO, GetActivateText>();
 
-			logger::info("Registered armor hook");
+			REX::INFO("Registered armor hook");
 		}
 
 		if (const auto weaponAction = settings->GetActionForType(RE::FormType::Weapon); weaponAction && weaponAction->IsEnabled()) {
 			stl::write_vfunc<RE::TESObjectWEAP, Activate>();
 			stl::write_vfunc<RE::TESObjectWEAP, GetActivateText>();
 
-			logger::info("Registered weapon hook");
+			REX::INFO("Registered weapon hook");
 		}
 
 		if (const auto ingredientAction = settings->GetActionForType(RE::FormType::Ingredient); ingredientAction && ingredientAction->IsEnabled()) {
 			stl::write_vfunc<RE::IngredientItem, Activate>();
 			stl::write_vfunc<RE::IngredientItem, GetActivateText>();
 
-			logger::info("Registered ingredient hook");
+			REX::INFO("Registered ingredient hook");
 		}
 
 		if (const auto alchemyAction = settings->GetActionForType(RE::FormType::AlchemyItem); alchemyAction && alchemyAction->IsEnabled()) {
 			stl::write_vfunc<RE::AlchemyItem, Activate>();
 			stl::write_vfunc<RE::AlchemyItem, GetActivateText>();
 
-			logger::info("Registered alchemy hook");
+			REX::INFO("Registered alchemy hook");
 		}
 
 		if (const auto scrollAction = settings->GetActionForType(RE::FormType::Scroll); scrollAction && scrollAction->IsEnabled()) {
 			stl::write_vfunc<RE::ScrollItem, Activate>();
 			stl::write_vfunc<RE::ScrollItem, GetActivateText>();
 
-			logger::info("Registered scroll hook");
+			REX::INFO("Registered scroll hook");
 		}
 
 		if (const auto torchAction = settings->GetActionForType(RE::FormType::Light); torchAction && torchAction->IsEnabled()) {
 			stl::write_vfunc<RE::TESObjectLIGH, Activate>();
 			stl::write_vfunc<RE::TESObjectLIGH, GetActivateText>();
 
-			logger::info("Registered torch hook");
+			REX::INFO("Registered torch hook");
 		}
 
 		if (const auto ammoAction = settings->GetActionForType(RE::FormType::Ammo); ammoAction && ammoAction->IsEnabled()) {
 			stl::write_vfunc<RE::TESAmmo, Activate>();
 			stl::write_vfunc<RE::TESAmmo, GetActivateText>();
 
-			logger::info("Registered ammo hook");
+			REX::INFO("Registered ammo hook");
 		}
 	}
 }

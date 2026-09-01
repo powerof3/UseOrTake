@@ -2,42 +2,21 @@
 
 void Manager::LoadSettings()
 {
-	const auto path = std::format("Data/SKSE/Plugins/{}.ini", Version::PROJECT);
+	const auto store = REX::FIniSettingStore::GetSingleton();
+	store->Init(path.data(), "");
 
-	CSimpleIniA ini;
-	ini.SetUnicode();
-
-	ini.LoadFile(path.c_str());
-
-	ini::get_value(ini, hotKey, "Settings", "Alternate action hotkey", ";Press hotkey + Activate key to perform alternative action. Default is Left Shift\n;Hold hotkey to perform secondary action, if available.\n\n;DXScanCodes : https://ck.uesp.net/wiki/Input_Script");
-	ini::get_value(ini, hotKeyGamePad, "Settings", "Alternate action hotkey (Gamepad)", ";");
-	ini::get_value(ini, keyHeldDuration, "Settings", "Hotkey hold duration", ";How long should the hotkey be held down (in seconds) before switching to secondary action.");
-
-	armors = Action(ini, "Armors", "Equip", ";Default action upon activating\n;0 - Take | 1 - Equip.", true);
-
-	weapons = SecondaryAction(ini, "Weapons", "Equip", "Equip and Draw", ";0 - Take | 1 - Equip | 2 - Equip and Draw.", true);
-
-	alchemy = AlchemyAction(ini, "Potions", "Drink", "Eat", "Apply", ";0 - Take | 1 - Drink potion/Eat food/Apply poison.");
-
-	ingestibles = Action(ini, "Ingredients", "Eat", ";0 - Take | 1 - Eat.", false);
-
-	scrolls = SecondaryAction(ini, "Scrolls", "Equip", "Read", ";0 - Take | 1 - Equip | 2 - Read (cast scrolls).", false);
-
-	torches = Action(ini, "Torches", "Equip", ";0 - Take | 1 - Equip.", false);
-
-	ammo = Action(ini, "Ammo", "Equip", ";0 - Take | 1 - Equip.", false);
-
-	(void)ini.SaveFile(path.c_str());
+	store->Load();
+	store->Save();
 }
 
 void Manager::Register()
 {
-	logger::info("{:*^30}", "EVENTS");
+	REX::INFO("{:*^30}", "EVENTS");
 
 	if (const auto inputMgr = RE::BSInputDeviceManager::GetSingleton()) {
 		inputMgr->AddEventSink(GetSingleton());
 
-		logger::info("Registered for hotkey event");
+		REX::INFO("Registered for hotkey event");
 	}
 }
 
@@ -61,41 +40,6 @@ Action* Manager::GetActionForType(RE::FormType a_type)
 	default:
 		return nullptr;
 	}
-}
-
-Key Manager::GetHotkey() const
-{
-	return hotKey;
-}
-
-Key Manager::GetHotkeyGamePad() const
-{
-	return hotKeyGamePad;
-}
-
-bool Manager::GetHotkeyPressed() const
-{
-	return keyPressed;
-}
-
-void Manager::SetHotkeyPressed(bool a_pressed)
-{
-	keyPressed = a_pressed;
-}
-
-bool Manager::GetHotkeyHeld() const
-{
-	return keyHeld;
-}
-
-void Manager::SetHotkeyHeld(bool a_held)
-{
-	keyHeld = a_held;
-}
-
-float Manager::GetKeyHeldDuration() const
-{
-	return keyHeldDuration;
 }
 
 void Manager::UpdateCrosshairs()
