@@ -5,7 +5,8 @@
 
 class Manager :
 	public REX::TSingleton<Manager>,
-	public RE::BSTEventSink<RE::InputEvent*>
+	public RE::BSTEventSink<RE::InputEvent*>,
+	public RE::BSTEventSink<RE::TESLoadGameEvent>
 {
 public:
 	void        LoadSettings();
@@ -30,6 +31,7 @@ private:
 	static void UpdateCrosshairs();
 
 	RE::BSEventNotifyControl ProcessEvent(RE::InputEvent* const* a_evn, RE::BSTEventSource<RE::InputEvent*>*) override;
+	RE::BSEventNotifyControl ProcessEvent(const RE::TESLoadGameEvent* a_evn, RE::BSTEventSource<RE::TESLoadGameEvent>*);
 
 	// members
 	static inline constexpr auto path = R"(Data\SKSE\Plugins\po3_UseOrTake.ini)"sv;

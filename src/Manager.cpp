@@ -50,6 +50,11 @@ void Manager::Register()
 
 		REX::INFO("Registered for hotkey event");
 	}
+
+	if (auto scriptMgr = RE::ScriptEventSourceHolder::GetSingleton()) {
+		scriptMgr->AddEventSink<RE::TESLoadGameEvent>(GetSingleton());
+		REX::INFO("Registered for load game event");
+	}
 }
 
 Action* Manager::GetActionForType(RE::FormType a_type)
@@ -140,6 +145,18 @@ RE::BSEventNotifyControl Manager::ProcessEvent(RE::InputEvent* const* a_evn, RE:
 			}
 		}
 	}
+
+	return RE::BSEventNotifyControl::kContinue;
+}
+
+RE::BSEventNotifyControl Manager::ProcessEvent(const RE::TESLoadGameEvent* a_evn, RE::BSTEventSource<RE::TESLoadGameEvent>*)
+{
+	if (!a_evn) {
+		return RE::BSEventNotifyControl::kContinue;
+	}
+	
+	SetHotkeyPressed(false);
+	SetHotkeyHeld(false);
 
 	return RE::BSEventNotifyControl::kContinue;
 }
