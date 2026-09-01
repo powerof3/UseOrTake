@@ -94,18 +94,7 @@ void Manager::UpdateCrosshairs()
 
 RE::BSEventNotifyControl Manager::ProcessEvent(RE::InputEvent* const* a_evn, RE::BSTEventSource<RE::InputEvent*>*)
 {
-	using InputType = RE::INPUT_EVENT_TYPE;
-
 	if (!a_evn) {
-		return RE::BSEventNotifyControl::kContinue;
-	}
-
-	const auto player = RE::PlayerCharacter::GetSingleton();
-	if (!player || !player->Is3DLoaded()) {
-		return RE::BSEventNotifyControl::kContinue;
-	}
-
-	if (const auto UI = RE::UI::GetSingleton(); !UI || UI->IsMenuOpen(RE::Console::MENU_NAME) || UI->GameIsPaused()) {
 		return RE::BSEventNotifyControl::kContinue;
 	}
 
