@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Action.h"
+#include "INI.h"
 
 class Manager :
 	public REX::TSingleton<Manager>,
@@ -24,6 +25,8 @@ public:
 	[[nodiscard]] float GetKeyHeldDuration() const { return keyHeldDuration; }
 
 private:
+	void UpdateINISettings();
+	
 	static void UpdateCrosshairs();
 
 	RE::BSEventNotifyControl ProcessEvent(RE::InputEvent* const* a_evn, RE::BSTEventSource<RE::InputEvent*>*) override;
@@ -39,9 +42,9 @@ private:
 	Action          torches{ "Torches"sv, "Equip" };
 	Action          ammo{ "Ammo"sv, "Equip" };
 
-	REX::TIniSetting<std::uint32_t> hotKey{ "Settings", "Alternate action hotkey", 42 };
-	REX::TIniSetting<std::uint32_t> hotKeyGamePad{ "Settings", "Alternate action hotkey (Gamepad)", 0 };
-	REX::TIniSetting<float>         keyHeldDuration{ "Settings", "Hotkey hold duration", 0.7f };
+	INI::Setting<std::uint32_t> hotKey{ "Settings"sv, "Alternate action hotkey"sv, "iAlternateActionKey"sv, 42 };
+	INI::Setting<std::uint32_t> hotKeyGamePad{ "Settings"sv, "Alternate action hotkey (Gamepad)"sv, "iAlternateActionKeyGamePad"sv, 0 };
+	INI::Setting<float>         keyHeldDuration{ "Settings"sv, "Hotkey hold duration"sv, "fHotkeyHoldDuration"sv, 0.7f };
 
 	std::atomic_bool keyPressed{ false };
 	std::atomic_bool keyHeld{ false };

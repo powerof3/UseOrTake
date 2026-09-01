@@ -1,3 +1,7 @@
+#pragma once
+
+#include "INI.h"
+
 class Action
 {
 public:
@@ -25,9 +29,10 @@ protected:
 		return static_cast<const std::string&>(primaryActionLabel);
 	}
 
-	REX::TIniSetting<bool>          enabled;
-	REX::TIniSetting<std::uint32_t> action;
-	REX::TIniSetting<std::string>   primaryActionLabel;
+	// members
+	INI::Setting<bool>          enabled;
+	INI::Setting<std::uint32_t> action;
+	INI::Setting<std::string>   primaryActionLabel;
 };
 
 class SecondaryAction final : public Action
@@ -39,7 +44,7 @@ public:
 	[[nodiscard]] std::string GetActionLabel(RE::TESObjectREFR* a_activator, RE::TESBoundObject* a_base, bool a_keyPressed, bool a_keyHeld) const override;
 
 private:
-	REX::TIniSetting<std::string> secondaryActionLabel;
+	INI::Setting<std::string> secondaryActionLabel;
 };
 
 class AlchemyAction final : public Action
@@ -53,6 +58,7 @@ public:
 private:
 	[[nodiscard]] const std::string& GetLabelForAlchType(RE::TESBoundObject* a_base) const;
 
-	REX::TIniSetting<std::string> foodActionLabel;
-	REX::TIniSetting<std::string> poisonActionLabel;
+	// members
+	INI::Setting<std::string> foodActionLabel;
+	INI::Setting<std::string> poisonActionLabel;
 };

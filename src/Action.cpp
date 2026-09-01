@@ -1,9 +1,9 @@
 #include "Action.h"
 
 Action::Action(std::string_view a_section, std::string a_label) :
-	enabled(a_section, "Enabled", true),
-	action(a_section, "Default action", kTake),
-	primaryActionLabel(a_section, "Alternate action label", std::move(a_label))
+	enabled(a_section, "Enabled"sv, "bEnabled"sv, true),
+	action(a_section, "Default action"sv, "iDefaultAction"sv, kTake),
+	primaryActionLabel(a_section, "Alternate action label"sv, "sAlternateActionLabel"sv, std::move(a_label))
 {}
 
 std::string Action::get_take_label(RE::TESObjectREFR* a_activator)
@@ -43,7 +43,7 @@ std::string Action::GetActionLabel(RE::TESObjectREFR* a_activator, RE::TESBoundO
 
 SecondaryAction::SecondaryAction(std::string_view a_section, std::string a_label, std::string a_secondaryLabel) :
 	Action(a_section, std::move(a_label)),
-	secondaryActionLabel(a_section, "Alternate secondary action label", std::move(a_secondaryLabel))
+	secondaryActionLabel(a_section, "Alternate secondary action label"sv, "sAlternateSecondaryActionLabel"sv, std::move(a_secondaryLabel))
 {}
 
 std::string SecondaryAction::GetActionLabel(RE::TESObjectREFR* a_activator, RE::TESBoundObject*, bool a_keyPressed, bool a_keyHeld) const
@@ -59,8 +59,8 @@ std::string SecondaryAction::GetActionLabel(RE::TESObjectREFR* a_activator, RE::
 
 AlchemyAction::AlchemyAction(std::string_view a_section, std::string a_label, std::string a_foodLabel, std::string a_poisonLabel) :
 	Action(a_section, std::move(a_label)),
-	foodActionLabel(a_section, "Alternate action label (Food)", std::move(a_foodLabel)),
-	poisonActionLabel(a_section, "Alternate action label (Poison)", std::move(a_poisonLabel))
+	foodActionLabel(a_section, "Alternate action label (Food)"sv, "sAlternateActionLabelFood"sv, std::move(a_foodLabel)),
+	poisonActionLabel(a_section, "Alternate action label (Poison)"sv, "sAlternateActionLabelPoison"sv, std::move(a_poisonLabel))
 {}
 
 std::string AlchemyAction::GetActionLabel(RE::TESObjectREFR* a_activator, RE::TESBoundObject* a_base, bool a_keyPressed, bool) const
